@@ -41,8 +41,11 @@ async function saveStatus(status) {
 }
 
 async function sendTelegram(msg) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
-  await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.log('❗TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set');
+    return;
+  }
+  const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -51,6 +54,8 @@ async function sendTelegram(msg) {
       parse_mode: 'Markdown'
     })
   });
+  const data = await res.json();
+  console.log('Telegram API response:', data);
 }
 
 async function main() {
