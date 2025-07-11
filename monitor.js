@@ -60,16 +60,19 @@ async function main() {
 
   const found = {};
   $('table.waffle tr').each((i, el) => {
-    for (const [cell, rowNumber] of Object.entries(productRows)) {
-      if (i === rowNumber - 1) {
-        const tds = $(el).find('td');
-        const product = $(tds[1]).text().trim().toUpperCase();
-        const status = $(tds[2]).text().trim().toUpperCase();
-        found[cell] = status || null;
-        console.log(`${cell}: ${product} - ${status}`);
-      }
+  for (const [cell, rowNumber] of Object.entries(productRows)) {
+    if (i === rowNumber - 1) {
+      const tds = $(el).find('td');
+      // This will show ALL the text in all cells for this row:
+      const allCells = tds.map((i, td) => $(td).text().trim()).get();
+      console.log(`ROW ${rowNumber} [${cell}]:`, allCells);
+      // You can comment out the rest for now, or leave as is:
+      // const product = $(tds[1]).text().trim().toUpperCase();
+      // const status = $(tds[2]).text().trim().toUpperCase();
+      // found[cell] = status || null;
     }
-  });
+  }
+});
 
   // Compare to last run
   const lastValues = await getLastStatus();
