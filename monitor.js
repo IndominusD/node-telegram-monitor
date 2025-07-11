@@ -58,20 +58,25 @@ async function main() {
   const html = await resp.text();
   const $ = cheerio.load(html);
 
-  const found = {};
-  $('table.waffle tr').each((i, el) => {
-  for (const [cell, rowNumber] of Object.entries(productRows)) {
-    if (i === rowNumber - 1) {
-      const tds = $(el).find('td');
-      // This will show ALL the text in all cells for this row:
-      const allCells = tds.map((i, td) => $(td).text().trim()).get();
-      console.log(`ROW ${rowNumber} [${cell}]:`, allCells);
-      // You can comment out the rest for now, or leave as is:
-      // const product = $(tds[1]).text().trim().toUpperCase();
-      // const status = $(tds[2]).text().trim().toUpperCase();
-      // found[cell] = status || null;
+
+  const productsToFind = Object.values(productNames).map(p => p.toUpperCase());
+const found = {};
+
+$('table.waffle tr').each((i, el) => {
+  const tds = $(el).find('td');
+  tds.each((j, td) => {
+    const cellText = $(td).text().trim().toUpperCase();
+    // Try to match any product
+    for (const [cellKey, productName] of Object.entries(productNames)) {
+      if (cellText === productName.toUpperCase()) {
+        // Assume status is in the next cell (same row, next column)
+        const statusCell = tds[j + 1];
+        const status = statusCell ? $(statusCell).text().trim().toUpperCase() : null;
+        found[cellKey] = status;
+        console.log(`${cellKey}: ${productName} -> ${status}`);
+      }
     }
-  }
+  });
 });
 
   // Compare to last run
