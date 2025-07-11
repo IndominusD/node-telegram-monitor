@@ -116,7 +116,7 @@ MIT
 
 ## 💡 Credits
 
-Built by [Your Name], inspired by practical stock monitoring needs for WhatsApp/Telegram order flows.
+Built by IndominusD using ChatGPT 4.1
 
 ---
 
