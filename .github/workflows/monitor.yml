@@ -1,0 +1,36 @@
+name: Monitor Google Sheet (Node.js)
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout repo
+      uses: actions/checkout@v4
+
+    - name: 🟢 Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: 📦 Install dependencies
+      run: npm install
+
+    - name: 🚦 Run monitor script
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: node monitor.js
+
+    - name: 💾 Commit status updates
+      run: |
+        git config user.name "github-actions"
+        git config user.email "actions@github.com"
+        git add status.json
+        git diff --cached --quiet || git commit -m "Update status.json"
+        git push
