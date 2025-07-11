@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import fs from 'fs/promises';
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1K5YiNTiJs6kKqYRAZlC22loqFJDjzBzfUCNPbpdLT4g/htmlview?gid=2029268226';
